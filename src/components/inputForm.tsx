@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { supabase } from "../config/supabase";
 
 export const InputForm: React.FC = () => {
   const frontFileInputRef = useRef(null);
@@ -12,9 +13,66 @@ export const InputForm: React.FC = () => {
     backFileInputRef.current.click();
   };
 
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    ssn: "",
+    gender: "",
+    dob: "",
+    front_id: "",
+    back_id: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e, fileType) => {
+    setFormData({ ...formData, [fileType]: e.target.files[0] });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+
+      const frontFileUpload = await supabase.storage
+        .from("jovie")
+        .upload(`front/${formData.front_id}`, formData.front_id);
+
+      // Upload back file to Supabase Storage
+      const backFileUpload = await supabase.storage
+        .from("jovie")
+        .upload(`back/${formData.back_id}`, formData.back_id);
+
+      // Get the public URLs for the uploaded files
+      const frontFileUrl = `https://${supabase.projectURL}/storage/v1/object/public/${frontFileUpload.data?.path}`;
+      const backFileUrl = `https://${supabase.projectURL}/storage/v1/object/public/${backFileUpload.data?.path}`;
+
+      const { error } = await supabase.from("user_information").insert([formData]);
+  
+      if (error) {
+        console.error("Error saving data:", error.message);
+      } else {
+        console.log("Data saved successfully!");
+        // Reset form data or perform any other necessary actions
+        setFormData({
+          ...formData,
+          front_id: frontFileUrl,
+          back_id: backFileUrl,
+        });
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  };
+
   return (
     <div className="m-6 flex justify-center">
       <div className="flex justify-center bg-white p-10 flex-col rounded-2xl shadow-2xl">
+        <form onSubmit={handleSubmit}>
         <div className="pb-6">
           <h1 className="text-[#2e3f51] font-semibold text-2xl text-center">
             Application Form
@@ -30,6 +88,9 @@ export const InputForm: React.FC = () => {
             </label>
             <input
               type="text"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
               className="border-2 border-[#949494] w-fit p-3 rounded-md"
               placeholder="Enter your first name"
             />
@@ -40,6 +101,9 @@ export const InputForm: React.FC = () => {
             </label>
             <input
               type="text"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
               className="border-2 border-[#949494] w-fit p-3 rounded-md"
               placeholder="Enter your last name"
             />
@@ -49,8 +113,9 @@ export const InputForm: React.FC = () => {
           <label className="text-sm font-semibold text-[#2e3f51]">Email*</label>
           <input
             type="email"
-            name=""
-            id=""
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             className="border-2 border-[#949494] w-full p-3 rounded-md"
             placeholder="Enter your personal email address"
           />
@@ -59,8 +124,9 @@ export const InputForm: React.FC = () => {
           <label className="text-sm font-semibold text-[#2e3f51]">Phone*</label>
           <input
             type="tel"
-            name=""
-            id=""
+            name="phone_number"
+            value={formData.phone_number}
+            onChange={handleChange}
             className="border-2 border-[#949494] w-full p-3 rounded-md"
             placeholder="(000) 000-0000"
           />
@@ -71,7 +137,9 @@ export const InputForm: React.FC = () => {
           </label>
           <input
             type="text"
-            name=""
+            name="ssn"
+            value={formData.ssn}
+            onChange={handleChange}
             id=""
             className="border-2 border-[#949494] w-full p-3 rounded-md"
             placeholder=""
@@ -80,7 +148,9 @@ export const InputForm: React.FC = () => {
         <div>
           <label className="text-sm font-semibold text-[#2e3f51]">Gender</label>
           <select
-            name=""
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
             id="gender_field"
             className="border-2 border-[#949494] w-full p-3 rounded-md text-sm"
           >
@@ -96,7 +166,9 @@ export const InputForm: React.FC = () => {
           </label>
           <input
             type="date"
-            name=""
+            name="dob"
+            value={formData.dob}
+            onChange={handleChange}
             id=""
             className="border-2 border-[#949494] w-full p-3 rounded-md"
           />
@@ -127,8 +199,9 @@ export const InputForm: React.FC = () => {
             <input
               type="file"
               ref={frontFileInputRef}
-              name="frontFile"
-              id="frontFile"
+              name="front_id"
+              id="front_id"
+              onChange={(e) => handleFileChange(e, "front_id")}
               hidden
             />
           </div>
@@ -159,8 +232,9 @@ export const InputForm: React.FC = () => {
             <input
               type="file"
               ref={backFileInputRef}
-              name="backFile"
-              id="backFile"
+              name="back_id"
+              id="back_id"
+              onChange={(e) => handleFileChange(e, "back_id")}
               hidden
             />
           </div>
@@ -180,10 +254,13 @@ export const InputForm: React.FC = () => {
           </div>
         </div>
         <div className="flex justify-center py-6">
-          <button className="bg-blue-600 font-semibold text-white p-3 rounded-md w-full">
+          <button className="bg-blue-600 font-semibold text-white p-3 rounded-md w-full"
+          type="submit"
+          >
             APPLY NOW
           </button>
         </div>
+        </form>
       </div>
     </div>
   );
