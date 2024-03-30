@@ -15,8 +15,9 @@ export const Login: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.name === "email") {
         setEmail(e.target.value);
-      } else {
         setPassword(e.target.value);
+      } else {
+        return 0;
       }
     };
   
@@ -98,6 +99,7 @@ export const Login: React.FC = () => {
               <input
                 type="email"
                 id="email"
+                name="email"
                 placeholder="Enter your email address"
                 className="w-full border-2 border-[#949494] rounded-lg py-4 px-3"
               />
