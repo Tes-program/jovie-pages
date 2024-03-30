@@ -13,11 +13,12 @@ export const Login: React.FC = () => {
     const navigate = useNavigate();
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.name === "email") {
-        console.log(0);
-      } else {
-        setEmail(e.target.value);
-        setPassword(e.target.value);
+        const {name,value} = e.target
+      if (name === "email") {
+          setEmail(value)
+      } else if (name === "password"){
+        
+        setPassword(value)
         
       }
     };
@@ -101,6 +102,7 @@ export const Login: React.FC = () => {
                 type="email"
                 id="email"
                 name="email"
+                value={email}
                 placeholder="Enter your email address"
                 className="w-full border-2 border-[#949494] rounded-lg py-4 px-3"
               />
@@ -115,6 +117,8 @@ export const Login: React.FC = () => {
               <input
                 type="password"
                 id="password"
+                name="password"
+                value={password}
                 placeholder="Enter password"
                 onChange={handleChange}
                 className="w-full border-2 border-[#949494] rounded-lg py-4 px-3"
