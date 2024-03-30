@@ -1,15 +1,22 @@
 import React from 'react'
 import './App.css'
-import { Header } from './components/header'
-import { InputForm } from './components/inputForm'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { RegistrationForm } from "./pages/RegistrationForm";
+import { SuccessPage } from "./pages/SucessPage";
+import { Login } from './pages/Login';
+import OTPInputPage from './pages/OTP';
+
 
 const App: React.FC = () => {
   return (
-    <>
-    <Header />
-    <InputForm />
-   
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<RegistrationForm />} />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/otp" element={<OTPInputPage />} />
+      </Routes>
+    </Router>
   )
 }
 
