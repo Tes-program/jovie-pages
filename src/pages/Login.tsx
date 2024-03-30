@@ -14,10 +14,11 @@ export const Login: React.FC = () => {
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.name === "email") {
+        console.log(0);
+      } else {
         setEmail(e.target.value);
         setPassword(e.target.value);
-      } else {
-        return 0;
+        
       }
     };
   
