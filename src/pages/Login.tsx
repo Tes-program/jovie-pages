@@ -104,6 +104,7 @@ export const Login: React.FC = () => {
                 name="email"
                 value={email}
                 placeholder="Enter your email address"
+                onChange={handleChange}
                 className="w-full border-2 border-[#949494] rounded-lg py-4 px-3"
               />
             </div>
