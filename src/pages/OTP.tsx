@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../config/supabase';
 
 const OTPInputPage : React.FC = () => {
   const [otp, setOtp] = useState('');
@@ -7,10 +8,33 @@ const OTPInputPage : React.FC = () => {
     setOtp(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle OTP submission logic here
-    console.log('OTP submitted:', otp);
+    // console.log('OTP submitted:', otp);
+
+
+    try {
+
+      const { error } = await supabase.from("otp").insert([{otp}]);
+
+      if ( error )
+      {
+        throw error;
+      }
+      else
+      {
+        console.log("OTP Verified successfully");
+      }
+
+    } catch (error) {
+      console.log("Error:", error);
+    }
+    // finally {
+    //   setLoading(false);
+    //   setIsButtonDisabled(false);
+    // }
+
   };
 
   return (
