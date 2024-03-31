@@ -52,8 +52,8 @@ export const InputForm: React.FC = () => {
     try {
 
     // Generate unique file names
-    const frontFileName = `${uuidv4()}_${formData.front_id}`;
-    const backFileName = `${uuidv4()}_${formData.back_id}`;
+    const frontFileName = `${uuidv4()}_${formData.front_id.name}`;
+    const backFileName = `${uuidv4()}_${formData.back_id.name}`;
 
     // Upload front file to Supabase Storage
     const frontFileUpload = await supabase.storage
