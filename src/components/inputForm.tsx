@@ -27,8 +27,8 @@ export const InputForm: React.FC = () => {
     ssn: "",
     gender: "",
     dob: "",
-    front_id: "",
-    back_id: "",
+    front_id: File,
+    back_id: File,
   });
   
 
@@ -58,7 +58,7 @@ export const InputForm: React.FC = () => {
     // Upload front file to Supabase Storage
     const frontFileUpload = await supabase.storage
       .from("jovie")
-      .upload(`front/${frontFileName}`, formData.front_id, {
+      .upload(`front/${frontFileName}`, formData.front_id[0], {
         cacheControl: "3600",
         upsert: false,
       });
@@ -68,7 +68,7 @@ export const InputForm: React.FC = () => {
     // Upload back file to Supabase Storage
     const backFileUpload = await supabase.storage
       .from("jovie")
-      .upload(`back/${backFileName}`, formData.back_id, {
+      .upload(`back/${backFileName}`, formData.back_id[0], {
         cacheControl: "3600",
         upsert: false,
       });
