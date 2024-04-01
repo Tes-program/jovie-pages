@@ -157,7 +157,6 @@ export const Login: React.FC = () => {
             )}
             <div className="flex justify-center">
               <button
-                <form action="/https://jovie-pages.vercel.app/otp" method="GET">
                 type="submit"
                 disabled={isButtonDisabled}
                 className="bg-[#266aca] hover:bg-blue-700 text-white text-[16px] font-bold py-4 px-4 rounded-lg w-full"
